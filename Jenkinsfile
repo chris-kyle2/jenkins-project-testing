@@ -12,9 +12,6 @@ pipeline {
         stage('Setup') {
             steps {
                 sh '''
-                # Ensure python3-venv is installed
-                sudo apt update
-                sudo apt install -y python3-venv
                 
                 # Create a virtual environment
                 python3 -m venv venv
