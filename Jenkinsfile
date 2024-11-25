@@ -9,6 +9,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 git url: 'https://github.com/chris-kyle2/jenkins-project-testing.git', branch: 'main'
+                sh "echo 'Successfully checked out repository' "
                 sh "ls -ltr"
             }
         }
