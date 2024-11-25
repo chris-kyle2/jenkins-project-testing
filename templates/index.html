@@ -1,50 +1,64 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Todo App</title>
+    <title>Adarsh's Todo App</title>
     <style>
       body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(to bottom right, #f8f9fa, #e9ecef);
         margin: 0;
         padding: 20px;
-        color: #333;
+        color: #343a40;
+      }
+      header {
+        text-align: center;
+        margin-bottom: 30px;
       }
       h1 {
-        color: #333;
+        color: #4caf50;
+        margin-bottom: 5px;
+      }
+      h2 {
+        color: #495057;
       }
       form {
+        text-align: center;
         margin-bottom: 20px;
       }
-      input[type="text"],
-      textarea {
+      input[type="text"] {
         padding: 10px;
-        margin: 10px 0;
-        width: 300px;
-        border: 1px solid #ddd;
+        width: 250px;
+        border: 1px solid #ced4da;
         border-radius: 4px;
+        font-size: 16px;
+        margin-right: 10px;
       }
       input[type="submit"] {
         background-color: #4caf50;
         color: white;
-        padding: 10px 15px;
+        padding: 10px 20px;
         border: none;
         border-radius: 4px;
         cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
       }
       input[type="submit"]:hover {
-        background-color: #45a049;
+        background-color: #388e3c;
       }
       ul {
         list-style-type: none;
         padding: 0;
+        max-width: 600px;
+        margin: 0 auto;
       }
       li {
-        background-color: #fff;
-        margin-bottom: 8px;
-        padding: 12px;
-        border: 1px solid #ddd;
+        background-color: #ffffff;
+        margin-bottom: 10px;
+        padding: 15px;
+        border: 1px solid #dee2e6;
         border-radius: 4px;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
       }
       .task-item {
         display: flex;
@@ -53,11 +67,29 @@
       }
       .task-text {
         margin: 0;
+        font-size: 16px;
+        color: #495057;
+      }
+      .delete-button {
+        background-color: #e3342f;
+        color: white;
+        padding: 8px 12px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.3s;
+      }
+      .delete-button:hover {
+        background-color: #cc1f1a;
       }
     </style>
   </head>
   <body>
-    <h1>Todo App: I made some changes again!!</h1>
+    <header>
+      <h1>Adarsh's Todo App</h1>
+      <p>Manage your tasks with style!</p>
+    </header>
 
     <!-- Add Task Form -->
     <form method="post">
@@ -66,7 +98,7 @@
     </form>
 
     <!-- Display Tasks -->
-    <h2>Tasks:</h2>
+    <h2>Your Tasks</h2>
     <ul>
       {% for id, task in tasks.items() %}
       <li class="task-item">
@@ -74,7 +106,7 @@
         <!-- Delete Button for Each Task -->
         <form method="post" style="display: inline">
           <input type="hidden" name="task_id_to_delete" value="{{ id }}" />
-          <input type="submit" name="delete_task" value="Delete" />
+          <button type="submit" name="delete_task" class="delete-button">Delete</button>
         </form>
       </li>
       {% endfor %}
