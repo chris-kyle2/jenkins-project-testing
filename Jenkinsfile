@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    environment{
+        SERVER_IP = credentials('prod-server-ip')
+    }
     options { skipDefaultCheckout() }
     stages {
 
@@ -13,13 +16,7 @@ pipeline {
         stage('Setup') {
             steps {
                 sh '''
-                
-                # Create a virtual environment
-                python3 -m venv venv
-                
-                # Activate the virtual environment and install dependencies
-                . venv/bin/activate
-                pip install -r requirements.txt
+                    pip install -r requirements.txt
                 '''
             }
         }
@@ -27,12 +24,32 @@ pipeline {
         stage('Test') {
             steps {
                 sh '''
-                # Activate the virtual environment
-                . venv/bin/activate
-                
-                # Run tests
-                pytest
+                   pytest
                 '''
+            }
+        }
+        stage('package-code'){
+            steps{
+                sh " zip -r myapp.zip ./* -x '*.git*' "
+                sh "ls -lart"
+            }
+        }
+        stage('Deploy to prod stage'){
+            steps{
+                withCredentials([sshUserPrivateKey(credentialsId: 'ssh-key',keyFileVariable: 'MY_SSH_KEY',usernameVariable: 'username')]){
+                    sh ''' 
+                        scp -i $MY_SSH_KEY -o StrictHostChecking = no  myapp.zip ${username}@${SERVER_IP}:/home/ec2-user
+                        ssh -i $MY_SSH_KEY -o StrictHostChecking = no  ${username}@${SERVER_IP} << EOF
+                        unzip -o /home/ec2-user/myapp.zip -d  /home/ec2-user/app
+                        source app/venv/bin/activate
+                        cd /home/ec2-user/app
+                        pip install -r requirements.txt
+                        sudo systemctl restart flaskapp.service
+EOF
+
+
+                    ''' 
+                }
             }
         }
     }
